@@ -434,8 +434,8 @@ router.get("/general-tasks", async (req, res) => {
       const requesterId = parseInt(req.query.requesterId as string);
       if (!requesterId) return res.status(400).json({ error: "requesterId required for includeArchived" });
       const actorRoles = await getUserRoles(requesterId);
-      if (!hasAnyRole(actorRoles, ['Coach'])) {
-        return res.status(403).json({ error: "Only coaches can view archived tasks" });
+      if (!hasAnyRole(actorRoles, COACH_CAPTAIN)) {
+        return res.status(403).json({ error: "Only coaches and captains can view archived tasks" });
       }
     }
     const items = await storage.getGeneralTasks(includeArchived);
@@ -490,8 +490,8 @@ router.delete("/general-tasks/:id", async (req, res) => {
     const { deletedBy } = req.body;
     if (!deletedBy) return res.status(400).json({ error: "deletedBy required" });
     const actorRoles = await getUserRoles(parseInt(deletedBy));
-    if (!hasAnyRole(actorRoles, ['Coach'])) {
-      return res.status(403).json({ error: "Only coaches can permanently delete general tasks" });
+    if (!hasAnyRole(actorRoles, COACH_CAPTAIN)) {
+      return res.status(403).json({ error: "Only coaches and captains can permanently delete general tasks" });
     }
     await storage.deleteGeneralTask(id);
     res.json({ success: true });

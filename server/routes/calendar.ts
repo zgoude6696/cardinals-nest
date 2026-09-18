@@ -1,5 +1,3 @@
-import { DEFAULT_TEAM_IDENTITY } from '../../shared/branding';
-import { APP_NAME } from '../../shared/branding';
 import { Router } from "express";
 import { storage } from "../storage";
 import { getUserRoles, hasAnyRole, COACH_CAPTAIN_DEPT_HEAD, LEADERSHIP_ALL, tbaFetch, TBA_KEY, toaFetch, TOA_KEY } from "../helpers";
@@ -67,7 +65,7 @@ async function applyInvites(eventId: number, eventTitle: string, invitees: numbe
     }).catch((e) => console.error("createNotification (invite):", e))
   ));
   sendPushToUsers(added, {
-    title: actor?.name ? `${actor.name} • ${APP_NAME}` : APP_NAME,
+    title: actor?.name ? `${actor.name} • Cardinal’s Nest` : "Cardinal’s Nest",
     body: `You've been invited to "${eventTitle}"`,
     url: "/#/calendar",
     tag: `event-invite-${eventId}`,
@@ -234,7 +232,7 @@ router.get("/calendar/toa-preview", async (req, res) => {
       const start = m >= 8 ? y : y - 1;
       return `${String(start).slice(2)}${String(start + 1).slice(2)}`;
     })();
-    const teamNum = (teamSettings.teamNumber as number) || DEFAULT_TEAM_IDENTITY.teamNumber;
+    const teamNum = (teamSettings.teamNumber as number) || 6696;
     const data = await toaFetch(`/team/ftc${teamNum}/events/${season}`);
     const events = Array.isArray(data) ? data : [];
     const mapped = events.map((e: any) => ({

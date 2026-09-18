@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --team-color: #dc2626;
-  --team-color-rgb: 220, 38, 38;
+  --team-color: #bc262a;
+  --team-color-rgb: 188, 38, 42;
 }
 
 body { font-family: 'Inter', sans-serif; }
@@ -26,15 +26,15 @@ body { font-family: 'Inter', sans-serif; }
 .dark .text-slate-700 { color: #d4d4d4; }
 .dark .text-slate-600 { color: #a3a3a3; }
 .dark .text-slate-500 { color: #a3a3a3; }
-.dark .text-slate-400 { color: #a3a3a3; }
-.dark .text-slate-300 { color: #737373; }
+.dark .text-slate-400 { color: #737373; }
+.dark .text-slate-300 { color: #525252; }
 .dark .border-slate-200 { border-color: #404040; }
-.dark .border-slate-300 { border-color: #737373; }
+.dark .border-slate-300 { border-color: #525252; }
 .dark .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 .dark .shadow-lg { box-shadow: 0 10px 15px rgba(0,0,0,0.4); }
 .dark .shadow-2xl { box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
 
 .dark ::-webkit-scrollbar { width: 6px; height: 6px; }
 .dark ::-webkit-scrollbar-track { background: #262626; border-radius: 3px; }
-.dark ::-webkit-scrollbar-thumb { background: #737373; border-radius: 3px; }
-.dark ::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
+.dark ::-webkit-scrollbar-thumb { background: #525252; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #737373; }

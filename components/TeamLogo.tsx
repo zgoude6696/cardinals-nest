@@ -1,3 +1,4 @@
+import { TEAM_BRAND } from '../shared/branding';
 import React from 'react';
 import { useTeamSettings } from '../contexts/TeamSettingsContext';
 
@@ -10,7 +11,7 @@ interface TeamLogoProps {
 const TeamLogo: React.FC<TeamLogoProps> = ({ className, teamNumber: teamNumberProp, logoUrl: logoUrlProp }) => {
   const { settings } = useTeamSettings();
   const teamNumber = teamNumberProp ?? settings.teamNumber;
-  const logoUrl = logoUrlProp !== undefined ? logoUrlProp : settings.logoUrl;
+  const logoUrl = logoUrlProp !== undefined ? logoUrlProp : (settings.logoUrl || (settings.teamNumber === TEAM_BRAND.teamNumber ? TEAM_BRAND.logoUrl : null));
 
   if (logoUrl) {
     return <img src={logoUrl} alt={`${settings.teamName} logo`} className={className} style={{ objectFit: 'contain' }} />;

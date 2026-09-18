@@ -1,4 +1,3 @@
-import { APP_NAME } from '../../shared/branding';
 import { Router } from "express";
 import { storage } from "../storage";
 import { sendPushToUsers } from "../push";
@@ -25,7 +24,7 @@ router.post("/notifications", async (req, res) => {
       // The message body describes the event (mention, assignment, …); keep the
       // title to who triggered it so it reads correctly for every notification type.
       sendPushToUsers([notification.toUserId], {
-        title: sender?.name ? `${sender.name} • ${APP_NAME}` : APP_NAME,
+        title: sender?.name ? `${sender.name} • Cardinal’s Nest` : "Cardinal’s Nest",
         body: notification.message || "You have a new notification",
         url: "/",
         tag: `notification-${notification.id}`,

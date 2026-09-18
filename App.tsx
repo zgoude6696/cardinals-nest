@@ -1,4 +1,4 @@
-import { APP_NAME } from './shared/branding';
+import { APP_NAME, resolveTeamBrand } from './shared/branding';
 import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppState, User, Project, Task, Role, Department, TaskStatus, Priority, Notification, Announcement, TimeEntry } from './types';
@@ -90,7 +90,7 @@ const App: React.FC = () => {
         // this session within one interval instead of needing a hard reload.
         api.settings.get(),
       ]);
-      setTeamSettings(settings);
+      setTeamSettings(resolveTeamBrand(settings));
       setState(prev => ({
         ...prev,
         users: users.map((u: any) => ({ ...u, id: String(u.id) })),
@@ -232,13 +232,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     api.settings.get().then((s: TeamSettingsData) => {
-      setTeamSettings(s);
+      setTeamSettings(resolveTeamBrand(s));
     }).catch(() => {});
   }, []);
 
   useEffect(() => {
-    document.title = `${APP_NAME} — ${teamSettings.teamProgram} Team ${teamSettings.teamNumber}`;
-  }, [teamSettings.teamProgram, teamSettings.teamNumber]);
+    document.title = APP_NAME;
+  }, [teamSettings.teamName]);
 
   useEffect(() => {
     const hex = teamSettings.themeColor.replace('#', '');
@@ -448,17 +448,17 @@ const App: React.FC = () => {
     return (
       <TeamSettingsContext.Provider value={{ settings: teamSettings, setSettings: setTeamSettings }}>
       <div className="min-h-screen bg-black flex items-center justify-center p-6">
-        <div className="bg-white dark:bg-slate-900 rounded-[40px] p-8 sm:p-16 w-full max-w-xl shadow-2xl animate-in zoom-in duration-500">
+        <div className="bg-white dark:bg-slate-900 rounded-[40px] p-6 sm:p-12 w-full max-w-xl shadow-2xl animate-in zoom-in duration-500">
           <div className="text-center mb-12">
-            <div className="w-32 h-32 mx-auto mb-8 rounded-2xl bg-black">
+            <div className="w-32 h-32 mx-auto mb-8">
                 <TeamLogo className="w-full h-full text-teamColor" />
             </div>
-            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter mb-3 leading-tight">{APP_NAME}</h1>
-            <p className="text-slate-400 font-black text-sm uppercase tracking-widest">{teamSettings.teamProgram} Team {teamSettings.teamNumber}</p>
+            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter uppercase mb-3 leading-tight">{APP_NAME}</h1>
+            <p className="text-slate-400 font-black text-sm uppercase tracking-widest">{teamSettings.teamName} · {teamSettings.teamProgram} Team {teamSettings.teamNumber}</p>
           </div>
 
           {state.users.length === 0 && isCloudSynced ? (
-            <div className="bg-slate-50 border-2 border-slate-100 p-8 rounded-[32px] text-center space-y-6">
+            <div className="bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 p-8 rounded-[32px] text-center space-y-6">
                 <div className="w-16 h-16 bg-teamColor/10 text-teamColor rounded-2xl flex items-center justify-center mx-auto">
                     <Database size={32} />
                 </div>
@@ -483,12 +483,12 @@ const App: React.FC = () => {
                 handleLogin(username, password);
               }} className="space-y-8">
                 <div className="space-y-2">
-                    <label className="block text-xs font-black uppercase tracking-[0.2em] ml-2">Secure Username</label>
-                    <input name="username" autoComplete="username" placeholder="Username" className="w-full p-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-2 border-slate-300 dark:border-slate-700 rounded-3xl outline-none focus:ring-4 focus:ring-teamColor/10 focus:border-teamColor transition-all font-black uppercase text-sm placeholder:text-slate-400" />
+                    <label className="block text-xs font-black uppercase tracking-[0.2em] ml-2 text-slate-700 dark:text-slate-300">Secure Username</label>
+                    <input name="username" autoComplete="username" placeholder="coach_mentor / team_captain" className="w-full p-6 border-2 border-slate-300 rounded-3xl outline-none focus:ring-4 focus:ring-teamColor/10 focus:border-teamColor transition-all font-black uppercase text-sm placeholder:text-slate-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
                 </div>
                 <div className="space-y-2">
-                    <label className="block text-xs font-black uppercase tracking-[0.2em] ml-2">Access Key</label>
-                    <input type="password" name="password" autoComplete="current-password" placeholder="••••••••" className="w-full p-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-2 border-slate-300 dark:border-slate-700 rounded-3xl outline-none focus:ring-4 focus:ring-teamColor/10 focus:border-teamColor transition-all font-black text-sm placeholder:text-slate-400" />
+                    <label className="block text-xs font-black uppercase tracking-[0.2em] ml-2 text-slate-700 dark:text-slate-300">Access Key</label>
+                    <input type="password" name="password" autoComplete="current-password" placeholder="••••••••" className="w-full p-6 border-2 border-slate-300 rounded-3xl outline-none focus:ring-4 focus:ring-teamColor/10 focus:border-teamColor transition-all font-black text-sm placeholder:text-slate-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
                 </div>
                 <button type="submit" className="w-full py-6 bg-teamColor text-white font-black rounded-3xl hover:opacity-90 shadow-2xl shadow-teamColor/20 transition-all transform active:scale-95 text-xl tracking-widest uppercase">
                     Initialize System
@@ -505,7 +505,7 @@ const App: React.FC = () => {
                   {showGuestForm ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                 </button>
                 {showGuestForm && (
-                  <div className="mt-4 p-5 bg-slate-50 rounded-2xl border border-slate-100 space-y-3 animate-in fade-in duration-200">
+                  <div className="mt-4 p-5 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 space-y-3 animate-in fade-in duration-200">
                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Enter the 6-digit PIN shared by your alliance partner</p>
                     <input
                       type="text"
@@ -514,7 +514,7 @@ const App: React.FC = () => {
                       placeholder="000000"
                       value={guestPin}
                       onChange={e => { setGuestPin(e.target.value.replace(/\D/g, '')); setGuestLoginError(''); }}
-                      className="w-full p-4 bg-white border-2 border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-teamColor/20 focus:border-teamColor transition-all font-black text-2xl tracking-[0.4em] text-center text-slate-900 placeholder:text-slate-400"
+                      className="w-full p-4 bg-white border-2 border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-teamColor/20 focus:border-teamColor transition-all font-black text-2xl tracking-[0.4em] text-center placeholder:text-slate-400 dark:bg-slate-800 text-slate-900 dark:text-white"
                     />
                     {guestLoginError && (
                       <p className="text-red-500 text-xs font-bold text-center">{guestLoginError}</p>

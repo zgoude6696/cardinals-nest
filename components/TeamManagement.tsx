@@ -135,6 +135,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
   const isDeptHead = useMemo(() => state.currentUser?.roles.includes(Role.DepartmentHead), [state.currentUser]);
   
   const canEditUsers = isCoach || isCaptain;
+  const canManageAttendance = isCoach || isCaptain;
   const canViewCertHistory = isCoach || isCaptain || isDeptHead;
 
   useEffect(() => {
@@ -303,7 +304,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
   // filtered out server-side — they've left the team, and leaving them in
   // padded every roster count a coach read off this table.
   useEffect(() => {
-    if (!isCoach || !showSummary) return;
+    if (!canManageAttendance || !showSummary) return;
     let cancelled = false;
     setSummaryLoading(true);
     setSummaryError('');
@@ -312,7 +313,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
       .catch(e => { if (!cancelled) setSummaryError(e?.message || 'Could not load the team summary.'); })
       .finally(() => { if (!cancelled) setSummaryLoading(false); });
     return () => { cancelled = true; };
-  }, [isCoach, showSummary, summaryWindow.start, summaryWindow.end, state.timeEntries.length]);
+  }, [canManageAttendance, showSummary, summaryWindow.start, summaryWindow.end, state.timeEntries.length]);
 
   const sortedSummaryRows = useMemo(() => {
     const dir = summarySort.dir === 'asc' ? 1 : -1;
@@ -444,7 +445,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                         <Lock size={16} />
                         <span className="hidden sm:inline">Change Password</span>
                     </button>
-                    {isCoach && (
+                    {canManageAttendance && (
                       <>
                         <button
                           onClick={() => setShowSummary(v => !v)}
@@ -453,7 +454,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                           <LayoutList size={16} />
                           <span className="hidden sm:inline">Summary</span>
                         </button>
-                        {archivedUsers.length > 0 && (
+                        {isCoach && archivedUsers.length > 0 && (
                           <button
                             onClick={() => setShowArchived(v => !v)}
                             className={`flex items-center justify-center gap-2 px-4 md:px-6 py-3 md:py-5 font-black rounded-xl md:rounded-[32px] shadow-lg transition-all uppercase tracking-widest text-[10px] md:text-xs ${showArchived ? 'bg-amber-500 text-white hover:opacity-90' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600'}`}
@@ -507,7 +508,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
             </div>
         </div>
 
-        {isCoach && showSummary && (
+        {canManageAttendance && showSummary && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl md:rounded-[32px] border-2 border-slate-100 dark:border-slate-700 overflow-hidden animate-in fade-in duration-300">
             <div className="flex flex-col gap-3 px-5 py-4 border-b-2 border-slate-100 dark:border-slate-700">
               <div className="flex items-center justify-between gap-3">
@@ -770,7 +771,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                             })()}
 
                             <div className="pt-4 md:pt-8 border-t-2 border-slate-50 dark:border-slate-700">
-                                {isCoach ? (
+                                {canManageAttendance ? (
                                   <>
                                     <div className="grid grid-cols-4 gap-2 md:gap-4">
                                         <div className="text-center">
@@ -1175,7 +1176,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          {isCoach && (
+                          {canManageAttendance && (
                             <button
                               onClick={() => setDeepDiveUser({ id: selectedUserForStats.id, name: selectedUserForStats.name })}
                               title="Hours and task contributions over a date window"
@@ -1216,7 +1217,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                             </div>
                         </section>
 
-                        {isCoach && (
+                        {canManageAttendance && (
                           <section>
                             <div className="flex items-center justify-between mb-4 md:mb-6">
                               <h3 className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2 md:gap-3">

@@ -163,11 +163,11 @@ const Layout: React.FC<LayoutProps> = ({ children, user, notificationsCount, onL
         <div className="px-2 py-2 md:px-3 md:py-3 lg:px-3 lg:py-3 flex items-center justify-between border-b border-white/10 flex-shrink-0">
           <div className={`flex items-center gap-2.5 overflow-hidden transition-all duration-300 ${collapsed ? 'w-0 opacity-0' : 'w-full opacity-100'}`}>
             <div className="flex-shrink-0" style={{ color: settings.themeColor }}>
-              <TeamLogo className="w-9 h-9 rounded bg-black" />
+              <TeamLogo className="w-7 h-7 rounded" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="font-black text-sm leading-tight tracking-tight">{APP_NAME}</h1>
-              <p className="text-[10px] font-bold tracking-wide" style={{ color: settings.themeColor }}>{settings.teamProgram} Team {settings.teamNumber}</p>
+              <h1 className="font-black text-sm leading-tight tracking-tighter uppercase truncate">{APP_NAME}</h1>
+              <p className="text-[9px] font-bold tracking-widest uppercase" style={{ color: settings.themeColor }}>{settings.teamProgram} Team {settings.teamNumber}</p>
             </div>
           </div>
           
@@ -189,7 +189,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, notificationsCount, onL
         {/* Nav — no overflow, tightly spaced */}
         <nav className={`flex-1 min-h-0 ${collapsed ? 'px-2 py-2' : 'px-2 py-1.5 md:px-3 md:py-2 lg:px-3 lg:py-2.5'} flex flex-col gap-0.5 md:gap-1 lg:gap-1 overflow-y-auto`}>
           {!isGuest && <NavItem to="/" icon={<HomeIcon size={16} />} label="HOME" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />}
-          {!isGuest && <NavItem to="/war-room" icon={<LayoutDashboard size={16} />} label="WAR ROOM" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />}
+          {!isGuest && <NavItem to="/war-room" icon={<LayoutDashboard size={16} />} label="FLIGHT DECK" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />}
           {!isGuest && <NavItem to="/boards" icon={<Kanban size={16} />} label="BOARDS" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />}
           {!isGuest && <NavItem to="/time" icon={<Clock size={16} />} label="TIME" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />}
           <NavItem to="/scout" icon={<Crosshair size={16} />} label="EVENTS" collapsed={collapsed} onClick={() => setMobileMenuOpen(false)} />
@@ -288,10 +288,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, notificationsCount, onL
               <div className="md:hidden text-teamColor">
                 <TeamLogo className="w-7 h-7" />
               </div>
-              <div>
-                <h2 className="text-sm md:text-lg font-black text-slate-900 dark:text-white tracking-tight">{APP_NAME}</h2>
-                <p className="text-[10px] font-bold text-slate-500">{settings.teamProgram} Team {settings.teamNumber}</p>
-              </div>
+              <h2 className="text-sm md:text-lg font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                {APP_NAME}
+              </h2>
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-3">

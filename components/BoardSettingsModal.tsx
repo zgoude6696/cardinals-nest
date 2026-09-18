@@ -190,7 +190,7 @@ const BoardSettingsModal: React.FC<BoardSettingsModalProps> = ({
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-2">
                 {showInWarRoom ? <Eye size={14} /> : <EyeOff size={14} />}
-                War Room Visibility
+                Flight Deck Visibility
               </label>
               <button
                 onClick={() => setShowInWarRoom(!showInWarRoom)}
@@ -201,9 +201,9 @@ const BoardSettingsModal: React.FC<BoardSettingsModalProps> = ({
                 }`}
               >
                 {showInWarRoom ? <Eye size={18} /> : <EyeOff size={18} />}
-                {showInWarRoom ? 'Visible in War Room' : 'Hidden from War Room'}
+                {showInWarRoom ? 'Visible in Flight Deck' : 'Hidden from Flight Deck'}
               </button>
-              <p className="text-[9px] text-slate-400 dark:text-slate-500 ml-2">Toggle whether this board shows on the War Room dashboard</p>
+              <p className="text-[9px] text-slate-400 dark:text-slate-500 ml-2">Toggle whether this board shows on the Flight Deck dashboard</p>
             </div>
           </div>
 

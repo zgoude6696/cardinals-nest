@@ -1,4 +1,3 @@
-import { DEFAULT_TEAM_IDENTITY } from '../../shared/branding';
 import { Router } from "express";
 import { storage } from "../storage";
 import { getUserRoles } from "../helpers";
@@ -53,7 +52,7 @@ router.get("/calendar/feed/:tokenWithExt", async (req, res) => {
     const visible = await filterVisibleEvents(events, userId, roles);
 
     const [settings, teamTimezone] = await Promise.all([storage.getTeamSettings(), getTeamTimezone()]);
-    const teamName = (settings.teamName as string) || DEFAULT_TEAM_IDENTITY.teamName;
+    const teamName = (settings.teamName as string) || "Cardinal’s Nest";
 
     const ics = buildCalendarFeed(visible as any, teamName, teamTimezone);
     res.setHeader("Content-Type", "text/calendar; charset=utf-8");

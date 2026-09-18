@@ -4,6 +4,9 @@ const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/tailwind.css',
+  '/cardinal-dynamics.png',
+  '/icon-192.png',
+  '/icon-512.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,8 +34,8 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Cardinal’s Nest';
   const options = {
     body: data.body || '',
-    icon: '/api/settings/pwa-icon.png',
-    badge: '/api/settings/pwa-icon.png',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
     tag: data.tag || undefined,
     data: { url: data.url || '/' },
   };

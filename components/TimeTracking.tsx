@@ -977,7 +977,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
                     )}
                     {pendingCheckin && (
                       <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 text-center">
-                        <p className="text-xs font-black text-orange-700 dark:text-orange-300 uppercase">Checked Out — Awaiting Coach Approval</p>
+                        <p className="text-xs font-black text-orange-700 dark:text-orange-300 uppercase">Checked Out — Awaiting Coach or Captain Approval</p>
                         <p className="text-[10px] text-orange-500 font-bold mt-1">
                           {formatTime(pendingCheckin.checkInAt)} – {pendingCheckin.checkOutAt ? formatTime(pendingCheckin.checkOutAt) : ''}
                         </p>
@@ -1010,7 +1010,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
             </div>
           )}
 
-          {isCoach && (() => {
+          {isCoachOrCaptain && (() => {
             const memberRows = activeUsers.map(user => {
               const uid = parseInt(user.id);
               const sessions = compCheckins.filter((c: any) => c.userId === uid);
@@ -1288,7 +1288,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
         </div>
       )}
 
-      {isCoach && pendingApprovals.length > 0 && (
+      {isCoachOrCaptain && pendingApprovals.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-4 md:p-5">
           <div className="flex items-center gap-2 mb-4">
             <AlertCircle size={15} className="text-orange-500" />
@@ -1442,7 +1442,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
                                 <Shuffle size={11} /> {workingOn ? 'Retask' : 'Assign'}
                               </button>
                             )}
-                            {isCoach && entry.status === 'checked_in' && (
+                            {isCoachOrCaptain && entry.status === 'checked_in' && (
                               <button
                                 onClick={() => handleCoachCheckOut(entry.id, entry.userId)}
                                 className="flex items-center gap-1 px-3 py-2 bg-teamColor text-white rounded-lg font-bold text-[10px] uppercase hover:opacity-90 transition-all shadow-lg shadow-teamColor/20"
@@ -1450,7 +1450,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
                                 <LogOut size={12} /> Check Out
                               </button>
                             )}
-                            {isCoach && (
+                            {isCoachOrCaptain && (
                               <button
                                 onClick={() => openEditModal(entry)}
                                 title="Edit this entry"
@@ -1471,7 +1471,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
         )}
       </div>
 
-      {isCoach && notCheckedInUsers.length > 0 && (
+      {isCoachOrCaptain && notCheckedInUsers.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
           <button
             onClick={() => setShowNotCheckedIn(v => !v)}
@@ -1514,7 +1514,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
           <div className="flex flex-wrap items-center justify-between gap-3 mb-0">
             <div className="flex items-center gap-2">
               <Users size={15} className="text-slate-400" />
-              <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Coach Tools</h3>
+              <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Attendance Tools</h3>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <button
@@ -1523,7 +1523,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
               >
                 <ListChecks size={13} /> Manage Tasks
               </button>
-              {isCoach && (
+              {isCoachOrCaptain && (
                 <button
                   onClick={() => setShowBulkAdd(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg font-bold text-xs uppercase hover:bg-blue-700 transition-all"
@@ -1534,7 +1534,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
             </div>
           </div>
 
-          {isCoach && showBulkAdd && (
+          {isCoachOrCaptain && showBulkAdd && (
             <div className="space-y-4 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <label className="block text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Quick Select by Role</label>
@@ -1638,7 +1638,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
         </div>
       )}
 
-      {isCoach && (
+      {isCoachOrCaptain && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
           <button
             onClick={() => setShowAllEntries(v => !v)}
@@ -1944,7 +1944,7 @@ const TimeTracking: React.FC<TimeTrackingProps> = ({ state, onRefresh }) => {
                       <button onClick={() => handleToggleGenTaskActive(gt)} className={`p-1.5 rounded-lg transition-colors ${gt.active ? 'hover:bg-amber-100 dark:hover:bg-amber-900/30 text-amber-600' : 'hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600'}`}>
                         <Archive size={13} />
                       </button>
-                      {isCoach && (
+                      {isCoachOrCaptain && (
                         <button onClick={() => handleDeleteGenTask(gt.id)} className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg text-red-500 transition-colors">
                           <Trash2 size={13} />
                         </button>

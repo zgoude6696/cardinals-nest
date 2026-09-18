@@ -25,12 +25,12 @@ const STEPS: TutorialStep[] = [
   },
   {
     icon: <LayoutDashboard size={28} className="text-blue-500" />,
-    label: 'War Room',
-    title: "War Room — live project pulse",
+    label: 'Flight Deck',
+    title: "Flight Deck — live project pulse",
     body:
-      "The War Room shows every active project's task matrix in one scrollable view. Blocked tasks are flagged with a pulsing red ring and listed separately so nothing slips. Use it during stand-ups to track the whole team at a glance.",
+      "The Flight Deck shows every active project's task matrix in one scrollable view. Blocked tasks are flagged with a pulsing red ring and listed separately so nothing slips. Use it during stand-ups to track the whole team at a glance.",
     route: '/war-room',
-    routeLabel: 'Open War Room',
+    routeLabel: 'Open Flight Deck',
   },
   {
     icon: <Clock size={28} className="text-amber-500" />,

@@ -61,7 +61,8 @@ const Certifications: React.FC<CertificationsProps> = ({ currentUser }) => {
 
   const isCoach = currentUser?.roles.includes(Role.Coach);
   const isCaptain = currentUser?.roles.includes(Role.TeamCaptain);
-  const isTrainer = currentUser?.roles.includes(Role.Trainer);
+  const isTrainer = currentUser?.roles.some(role => role === Role.Trainer || String(role) === 'Safety Trainer');
+  const canApproveCertifications = isCoach || isTrainer;
   const isCoachOrCaptain = isCoach || isCaptain;
   const canManageCerts = isCoachOrCaptain;
   const canSeeQueue = isCoach || isCaptain || isTrainer;
@@ -973,7 +974,7 @@ const Certifications: React.FC<CertificationsProps> = ({ currentUser }) => {
                     return null;
                   })()}
 
-                  {(isCoachOrCaptain || isTrainer) && (
+                  {canApproveCertifications && (
                     <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
                       <p className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Grant Certification</p>
                       {grantError && <p className="text-red-600 text-xs font-bold mb-2">{grantError}</p>}
@@ -1152,7 +1153,7 @@ const Certifications: React.FC<CertificationsProps> = ({ currentUser }) => {
                   const claimedByOther = req.status === 'in_progress' &&
                     req.trainerId &&
                     req.trainerId !== parseInt(currentUser?.id || '0') &&
-                    !isCoachOrCaptain;
+                    !isCoach;
                   return (
                   <div key={req.id} className={`rounded-2xl border-2 p-5 transition-all ${claimedByOther ? 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-700/50 opacity-60' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'}`}>
                     <div className="flex items-start justify-between gap-4 mb-3">
@@ -1187,7 +1188,7 @@ const Certifications: React.FC<CertificationsProps> = ({ currentUser }) => {
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {statusBadge(req.status)}
-                        {req.status === 'pending' && (
+                        {canApproveCertifications && req.status === 'pending' && (
                           <button
                             onClick={() => handleClaimRequest(req.id)}
                             className="px-3 py-1.5 bg-blue-600 text-white font-black text-[9px] rounded-xl hover:bg-blue-700 transition-all uppercase tracking-wider"
@@ -1195,7 +1196,7 @@ const Certifications: React.FC<CertificationsProps> = ({ currentUser }) => {
                             Claim
                           </button>
                         )}
-                        {req.status === 'in_progress' && (req.trainerId === parseInt(currentUser?.id || '0') || isCoachOrCaptain) && (
+                        {canApproveCertifications && req.status === 'in_progress' && (req.trainerId === parseInt(currentUser?.id || '0') || isCoach) && (
                           <button
                             onClick={() => openRequestDetail(req)}
                             className="px-3 py-1.5 bg-slate-900 dark:bg-slate-600 text-white font-black text-[9px] rounded-xl hover:bg-red-600 transition-all uppercase tracking-wider"

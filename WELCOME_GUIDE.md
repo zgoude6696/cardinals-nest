@@ -3,8 +3,8 @@
 
 ---
 
-> **How to use this document:** Copy all content into a new Google Doc.  
-> Each `[SCREENSHOT: ...]` label marks where to insert a screenshot you capture from the live app.  
+> **How to use this document:** Copy all content into a new Google Doc.
+> Each `[SCREENSHOT: ...]` label marks where to insert a screenshot you capture from the live app.
 > Delete this note before sharing with the team.
 
 ---
@@ -22,7 +22,7 @@
    - [Team Members](#54-team-members)
    - [Safety Trainers](#55-safety-trainers)
 6. [Feature Deep-Dives](#6-feature-deep-dives)
-   - [War Room Dashboard](#61-war-room-dashboard)
+   - [Flight Deck Dashboard](#61-flight-deck-dashboard)
    - [Kanban Boards](#62-kanban-boards)
    - [Time Tracking](#63-time-tracking)
    - [Scout Module](#64-scout-module)
@@ -43,7 +43,7 @@ Cardinal’s Nest is Team 6696's all-in-one operations platform. It replaces sca
 **What it does:**
 
 - Tracks every project task across all departments on Kanban boards
-- Gives coaches a real-time "War Room" view of team progress
+- Gives coaches a real-time "Flight Deck" view of team progress
 - Records student time, requires coach approval, and maintains a full audit trail
 - Powers FRC match scouting with live data from The Blue Alliance and Nexus APIs
 - Manages safety certifications and can lock tasks behind required certs
@@ -80,7 +80,7 @@ Every user has one or more roles. Your role determines what you can see and do.
 |---|---|---|
 | **Coach** | Adult mentors | Full access — manage users, approve time, post announcements, everything |
 | **Team Captain** | Student leaders | Create/edit tasks and projects, post announcements, manage assignments |
-| **SCRUM Master** | Sprint managers | Create/manage tasks, move items on Kanban boards, access War Room |
+| **SCRUM Master** | Sprint managers | Create/manage tasks, move items on Kanban boards, access Flight Deck |
 | **Department Head** | Dept leads | Manage tasks within their department, view their department's board |
 | **Safety Trainer** | Cert instructors | Process safety certification requests, grant/revoke certifications |
 | **Team Member** | General students | View boards, update assigned tasks, check in/out for time tracking |
@@ -94,12 +94,12 @@ Every user has one or more roles. Your role determines what you can see and do.
 
 Navigate using the sidebar on the left (desktop) or the bottom bar (mobile).
 
-[SCREENSHOT: Full sidebar open — show all navigation icons and labels: Home, War Room, Boards, Time, Scout, Safety, Team, Calendar, Resources. Capture in dark mode if the team uses it. Also show the Cardinal Dynamics logo at the top of the sidebar and the dark mode toggle icon at the bottom.]
+[SCREENSHOT: Full sidebar open — show all navigation icons and labels: Home, Flight Deck, Boards, Time, Scout, Safety, Team, Calendar, Resources. Capture in dark mode if the team uses it. Also show the Cardinal Dynamics logo at the top of the sidebar and the dark mode toggle icon at the bottom.]
 
 | Page | Icon | Summary |
 |---|---|---|
 | **Home** | House | Team feed, notifications, announcements |
-| **War Room** | Crosshair/grid | Full project status matrix across all active boards |
+| **Flight Deck** | Crosshair/grid | Full project status matrix across all active boards |
 | **Boards** | Columns | Kanban task boards per project and department |
 | **Time Tracking** | Clock | Check in/out, coach approvals, time audit |
 | **Scout** | Target | FRC match scouting, pit data, live TBA/Nexus feeds |
@@ -118,7 +118,7 @@ As a Coach, you have full access to everything. Your primary daily tasks are:
 
 **At the start of each meeting:**
 - Open **Time Tracking** → approve pending check-ins (amber-highlighted rows)
-- Glance at **War Room** for any blocked or at-risk tasks
+- Glance at **Flight Deck** for any blocked or at-risk tasks
 
 **During the season:**
 - Add new team members via **Team Management** → New User
@@ -146,7 +146,7 @@ Captains focus on the project boards and team coordination.
 
 **Your key tools:**
 - **Boards** — Create new projects, create and assign tasks, drag cards between columns
-- **War Room** — Monitor blocked tasks and sprint progress
+- **Flight Deck** — Monitor blocked tasks and sprint progress
 - **Home** — Post team announcements (Department or Global scope)
 - **Calendar** — Add meetings, outreach events, and volunteer sessions
 
@@ -157,7 +157,7 @@ Captains focus on the project boards and team coordination.
 4. Toggle "Board Visibility" if the task should only appear on a department board.
 
 **Tracking sprints:**
-Use the Blocked section in War Room (shown with a red ring) to spot and unblock dependencies quickly. SCRUM Masters can update task statuses and add notes directly from the task modal.
+Use the Blocked section in Flight Deck (shown with a red ring) to spot and unblock dependencies quickly. SCRUM Masters can update task statuses and add notes directly from the task modal.
 
 ---
 
@@ -168,7 +168,7 @@ Department Heads see a filtered view of their department's work.
 **Your key tools:**
 - **Boards → Department Board** — Shows only your department's tasks (including dept-only tasks)
 - **Boards → Project Boards** — Shows tasks marked visible to all boards
-- **War Room** — Full project view (read-only helpful context)
+- **Flight Deck** — Full project view (read-only helpful context)
 
 **Creating a department task:**
 When creating a task from your department board, the "Dept Only" toggle is on by default — the task stays private to your board. Turn it off if it belongs on the project board too.
@@ -213,11 +213,11 @@ You can also directly grant or revoke certifications on a member's profile from 
 
 ## 6. Feature Deep-Dives
 
-### 6.1 War Room Dashboard
+### 6.1 Flight Deck Dashboard
 
-The War Room gives coaches and captains a birds-eye view of every active project at once.
+The Flight Deck gives coaches and captains a birds-eye view of every active project at once.
 
-[SCREENSHOT: War Room page — show at least two project sections expanded, each with a task matrix of columns (Backlog, Not Started, In Progress, Blocked, Complete) and colored task cards inside each cell. If any task is blocked, show the red ring and pulsing dot on that section. Ideally show one completed task count badge in green.]
+[SCREENSHOT: Flight Deck page — show at least two project sections expanded, each with a task matrix of columns (Backlog, Not Started, In Progress, Blocked, Complete) and colored task cards inside each cell. If any task is blocked, show the red ring and pulsing dot on that section. Ideally show one completed task count badge in green.]
 
 **How to read it:**
 - Each row is a project. Each column is a task status.
@@ -225,7 +225,7 @@ The War Room gives coaches and captains a birds-eye view of every active project
 - A **red ring** on a project section means one or more tasks are blocked — the blocked list expands below it.
 - Tasks marked "Dept Only" do not appear here (they live only on dept boards).
 
-**During stand-ups:** Project the War Room on a screen. Walk down the rows: anything in Blocked needs immediate discussion.
+**During stand-ups:** Project the Flight Deck on a screen. Walk down the rows: anything in Blocked needs immediate discussion.
 
 ---
 
@@ -432,28 +432,28 @@ Announcements live on the Home page feed.
 
 ## 8. FAQ
 
-**Q: I can't log in — what do I do?**  
+**Q: I can't log in — what do I do?**
 A: Double-check your username (case-sensitive, no spaces). If you've forgotten your password, ask a coach to reset it via Team Management. The default password on new accounts is `changeme`.
 
-**Q: My time entry shows the wrong check-in time.**  
+**Q: My time entry shows the wrong check-in time.**
 A: Ask a coach to reject the incorrect entry and either re-add it manually via "Add Class Time" or have you check in again. All entries have a full audit trail so corrections are recorded.
 
-**Q: A task is in "Blocked" — what does that mean?**  
-A: It means the person working on it hit an obstacle they can't resolve alone. Check the task modal for a blockedReason note. If it has unmet dependencies (other tasks that must complete first), they show in the War Room under the task's project.
+**Q: A task is in "Blocked" — what does that mean?**
+A: It means the person working on it hit an obstacle they can't resolve alone. Check the task modal for a blockedReason note. If it has unmet dependencies (other tasks that must complete first), they show in the Flight Deck under the task's project.
 
-**Q: Can I use the Scout module without internet?**  
+**Q: Can I use the Scout module without internet?**
 A: Yes. Match scouting forms save locally if the server is unreachable. Once you reconnect, they sync automatically. You'll see a banner indicating how many entries are queued.
 
-**Q: How do I get a safety certification?**  
+**Q: How do I get a safety certification?**
 A: On the Safety Certifications page, find the cert you need and click "Request Certification." A Safety Trainer will claim your request, walk you through the requirements, and grant it upon completion.
 
-**Q: The Pit Display map isn't loading.**  
+**Q: The Pit Display map isn't loading.**
 A: The pit map loads from Nexus and requires the event's Nexus key to be set. Ask your coach to check the event settings. Each error state has a "Try Again" button — try that first if the map loaded before.
 
-**Q: Why can't I see a task on the project board?**  
+**Q: Why can't I see a task on the project board?**
 A: It may be marked "Dept Only," meaning it only shows on its department's board. Dept-only tasks show a blue "Dept Only" badge. Ask the task creator or a coach/captain if it needs to be made visible on the project board.
 
-**Q: How do I add our competition to the calendar?**  
+**Q: How do I add our competition to the calendar?**
 A: Coaches can click the TBA button on the Calendar page → select events from a checklist of Team 6696's registered 2026 TBA events → click Import. The system skips duplicates automatically.
 
 ---

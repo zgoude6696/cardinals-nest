@@ -1,4 +1,4 @@
-import { APP_NAME, DEFAULT_TEAM_IDENTITY } from '../shared/branding';
+import { APP_NAME } from '../shared/branding';
 import express from "express";
 import cors from "cors";
 import compression from "compression";
@@ -80,10 +80,11 @@ async function initializeDatabase() {
     if (rows[0].n === 0) {
       console.log("🌱  Seeding demo accounts …");
       await storage.seedDatabase();
-      console.log("✅  Demo accounts ready (password: changeme).");
+      console.log("✅  Demo accounts ready.");
     }
   } catch (e) {
-    console.warn("Auto-seed skipped:", e);
+    console.error("Initial account setup failed:", e);
+    throw e;
   }
 }
 
@@ -109,27 +110,37 @@ if (isProduction && !SESSION_SECRET) {
   process.exit(1);
 }
 
+// Render readiness probe; does not expose application data.
+app.get('/healthz', async (_req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ status: 'ok' });
+  } catch {
+    res.status(503).json({ status: 'unavailable' });
+  }
+});
+
 // Dynamic manifest.json — always served before static files so it reflects current team settings
 app.get("/manifest.json", async (req, res) => {
   try {
     const settings = await storage.getTeamSettings();
     const name = APP_NAME;
-    const color = (settings.themeColor as string) || '#dc2626';
+    const color = (settings.themeColor as string) || '#bc262a';
     res.setHeader('Content-Type', 'application/manifest+json');
     res.setHeader('Cache-Control', 'no-cache');
     res.json({
       name,
       short_name: name,
-      description: `${settings.teamName} — ${settings.teamProgram} ${settings.teamNumber} · Project Management & Scouting`,
+      description: `FRC Team ${settings.teamNumber} Project Management & Scouting`,
       start_url: "/",
       display: "standalone",
-      background_color: "#0a0a0a",
+      background_color: "#171717",
       theme_color: color,
       orientation: "any",
       icons: [
         { src: "/api/settings/pwa-icon.png", sizes: "512x512", type: "image/png", purpose: "any maskable" },
         { src: "/api/settings/pwa-icon.svg", sizes: "any", type: "image/svg+xml" },
-        { src: DEFAULT_TEAM_IDENTITY.logoUrl, sizes: "2048x2048", type: "image/png" },
+        { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
       ],
     });
   } catch {
@@ -175,7 +186,7 @@ if (isProduction) {
   });
 }
 
-const PORT = isProduction ? 5000 : 3001;
+const PORT = Number(process.env.PORT || (isProduction ? 5000 : 3001));
 
 // Initialize DB before accepting any traffic
 initializeDatabase().then(() => {

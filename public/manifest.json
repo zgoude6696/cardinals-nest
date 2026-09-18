@@ -1,18 +1,24 @@
 {
   "name": "Cardinal’s Nest",
   "short_name": "Cardinal’s Nest",
-  "description": "Cardinal Dynamics — FRC 6696 · Project Management & Scouting",
+  "description": "Cardinal Dynamics · FRC Team 6696 Project Management & Scouting",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#dc2626",
+  "background_color": "#171717",
+  "theme_color": "#bc262a",
   "orientation": "any",
   "icons": [
     {
-      "src": "/assets/cardinal-dynamics.png",
-      "sizes": "2048x2048",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

@@ -4,6 +4,8 @@ Cardinal Dynamics — FRC 6696 team management hub — tasks, scouting, scheduli
 
 Stack: React 19 + Vite + Tailwind (front end) · Express 5 + Drizzle ORM + PostgreSQL (back end).
 
+For the Render test deployment, follow [RENDER_TEST.md](RENDER_TEST.md).
+
 ## Run Locally
 
 **Prerequisites:** Node.js, a PostgreSQL database

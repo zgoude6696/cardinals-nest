@@ -1,4 +1,5 @@
-import { DEFAULT_TEAM_IDENTITY } from '../shared/branding';
+import { demoBootstrapPassword } from './bootstrapPassword';
+import { TEAM_BRAND, resolveTeamBrand } from '../shared/branding';
 import crypto from "crypto";
 import { db } from "./db";
 import { hashPassword } from "./security";
@@ -2847,10 +2848,7 @@ export class DatabaseStorage implements IStorage {
 
   private defaultTeamSettings(): InsertTeamSettings {
     return {
-      teamNumber: DEFAULT_TEAM_IDENTITY.teamNumber,
-      teamName: DEFAULT_TEAM_IDENTITY.teamName,
-      themeColor: DEFAULT_TEAM_IDENTITY.themeColor,
-      logoUrl: DEFAULT_TEAM_IDENTITY.logoUrl,
+      ...TEAM_BRAND,
       departments: [
         { name: 'Mechanical', color: '#f97316' },
         { name: 'Software', color: '#3b82f6' },
@@ -2874,7 +2872,7 @@ export class DatabaseStorage implements IStorage {
 
   async getTeamSettings(): Promise<TeamSettings> {
     const [row] = await db.select().from(teamSettings);
-    if (row) return row;
+    if (row) return resolveTeamBrand(row);
     const defaults = this.defaultTeamSettings();
     const [created] = await db.insert(teamSettings).values(defaults).returning();
     return created;
@@ -3067,52 +3065,53 @@ export class DatabaseStorage implements IStorage {
     const existingUsers = await this.getUsers();
     if (existingUsers.length > 0) return;
 
+    const bootstrapPassword = demoBootstrapPassword(process.env.NODE_ENV, process.env.DEMO_BOOTSTRAP_PASSWORD);
     const defaultUsers = [
       {
         username: 'coach_mentor',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Coach Mentor',
         roles: ['Coach'],
         departments: ['Leadership', 'Business'],
       },
       {
         username: 'team_captain',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Team Captain',
         roles: ['Team Captain', 'SCRUM Master'],
         departments: ['Software', 'Leadership'],
       },
       {
         username: 'mech_lead',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Mechanical Lead',
         roles: ['Department Head'],
         departments: ['Mechanical'],
       },
       {
         username: 'sw_lead',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Software Lead',
         roles: ['Department Head'],
         departments: ['Software'],
       },
       {
         username: 'elec_lead',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Electrical Lead',
         roles: ['Department Head'],
         departments: ['Electrical'],
       },
       {
         username: 'safety_trainer',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Sam Trainer',
         roles: ['Trainer'],
         departments: ['Mechanical', 'Electrical'],
       },
       {
         username: 'member1',
-        password: 'changeme',
+        password: bootstrapPassword,
         name: 'Team Member',
         roles: ['Team Member'],
         departments: ['Software'],
