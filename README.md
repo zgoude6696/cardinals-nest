@@ -18,6 +18,14 @@ See [REPLIT_SETUP.md](REPLIT_SETUP.md) for full deploy/setup details and [WELCOM
 
 For a temporary GitHub Codespaces demo, follow [CODESPACES_DEMO.md](CODESPACES_DEMO.md).
 
+## Attribution
+
+Cardinal’s Nest is the Cardinal Dynamics / FRC Team 6696 adaptation of [PioByte Hub](https://github.com/duellzach/PioByte-Hub), originally developed by FRC Team 10991 Piobyte and its contributors. We gratefully acknowledge their work as the foundation of this project.
+
+This repository retains its GitHub fork relationship to the upstream project. Cardinal Dynamics branding and team-specific changes do not replace the upstream attribution or change the license terms.
+
+Required Notice: Copyright FRC 10991 Piobyte (2026)
+
 ## License
 
 Copyright FRC 10991 Piobyte (2026). Licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE.md) — free to use, modify, and share for noncommercial purposes; commercial use requires permission from FRC 10991 Piobyte.
