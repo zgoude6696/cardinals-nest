@@ -9,13 +9,18 @@ const { default: certifications } = await import('./routes/certifications');
 let roles: string[] = [];
 let scopes: any[] = [];
 let writes = 0;
+let certLevel = 1;
 Object.assign(storage, {
   getUser: async () => ({ id: 1, roles }),
   getGeneralTasks: async () => [],
   deleteGeneralTask: async () => { writes++; },
   getTrainerScopes: async () => scopes,
-  getCertification: async () => ({ id: 5, department: 'Mechanical', level: 1 }),
-  getCertifications: async () => [{ id: 5, department: 'Mechanical', level: 1 }],
+  getCertification: async () => ({ id: 5, department: 'Mechanical', level: certLevel }),
+  getCertifications: async () => [{ id: 5, department: 'Mechanical', level: certLevel }],
+  createCertification: async (data: any) => ({ id: 5, ...data }),
+  updateCertification: async (id: number, data: any) => ({ id, ...data }),
+  getTeamSettings: async () => ({ departments: [{ name: 'Mechanical' }] }),
+  setTrainerScopes: async (_id: number, saved: any[]) => saved,
   getUserBadges: async () => [],
   grantCertificationWithBadges: async () => { writes++; return { row: { id: 1 }, newBadges: [] }; },
 });
@@ -51,6 +56,32 @@ try {
     assert.equal((await request('/users/2/certifications', 'POST', { certId: 5, grantedBy: 1 })).status, 201, 'Authorized leader/trainer can approve');
   }
   assert.equal(writes, 4, 'Denied grants never write');
+  for (const level of [4, 5]) {
+    roles = ['Coach'];
+    const created = await request('/certifications', 'POST', {
+      name: `Level ${level} skill`, department: 'Mechanical', level, createdBy: 1,
+    });
+    assert.equal(created.status, 201);
+    assert.equal((await created.json()).level, level, 'Creating retains upper levels');
+    const updated = await request('/certifications/5', 'PUT', { level, requesterId: 1 });
+    assert.equal(updated.status, 200);
+    assert.equal((await updated.json()).level, level, 'Editing retains upper levels');
+    const saved = await request('/users/2/trainer-scopes', 'PUT', {
+      scopes: [{ department: 'Mechanical', maxLevel: level }],
+    });
+    assert.equal(saved.status, 200);
+    assert.equal((await saved.json())[0].maxLevel, level, 'Scopes retain upper levels');
+
+    certLevel = level;
+    roles = ['Trainer'];
+    scopes = [{ department: 'Mechanical', maxLevel: level - 1 }];
+    const before = writes;
+    assert.equal((await request('/users/2/certifications', 'POST', { certId: 5, grantedBy: 1 })).status, 403);
+    assert.equal(writes, before, 'A lower trainer scope cannot grant an upper-level certification');
+    scopes = [{ department: 'Mechanical', maxLevel: level }];
+    assert.equal((await request('/users/2/certifications', 'POST', { certId: 5, grantedBy: 1 })).status, 201);
+    assert.equal(writes, before + 1, 'The matching trainer scope can grant it when prerequisites are empty');
+  }
   console.log('Attendance role and certification authorization route checks passed.');
 } finally {
   server.closeAllConnections();
