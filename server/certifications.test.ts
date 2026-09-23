@@ -61,9 +61,9 @@ const badge = (department: string | null, level: number): EarnedLevelBadge =>
 
 // --- shape ------------------------------------------------------------------
 
-test("MAX_LEVEL is 3 and LEVELS enumerates it", () => {
-  assert.equal(MAX_LEVEL, 3);
-  assert.deepEqual(LEVELS, [1, 2, 3]);
+test("MAX_LEVEL is 5 and LEVELS enumerates it", () => {
+  assert.equal(MAX_LEVEL, 5);
+  assert.deepEqual(LEVELS, [1, 2, 3, 4, 5]);
 });
 
 test("General is null and is its own track, distinct from a named department", () => {
@@ -176,6 +176,42 @@ test("highestUnlockedLevel walks the track", () => {
   );
 });
 
+// Full five-level tracks exercise the same shared rules used by API and UI.
+for (const department of ["Manufacturing", GENERAL]) {
+  test(`five-level progression and awards: ${department ?? "General"}`, () => {
+    const track = [1, 2, 3, 4, 5].map(level => cert(100 + level, department, level));
+    const earned: EarnedLevelBadge[] = [];
+    const heldIds = new Set<number>();
+    for (const level of [1, 2, 3, 4, 5]) {
+      assert.equal(highestUnlockedLevel(track, department, earned), level);
+      assert.ok(isLevelUnlocked(track, department, level, earned));
+      if (level < 5) assert.ok(!isLevelUnlocked(track, department, level + 1, earned));
+      heldIds.add(100 + level);
+      const additions = newlyEarnedLevelBadges(track, heldIds, earned);
+      assert.deepEqual(additions, [badge(department, level)]);
+      earned.push(...additions);
+    }
+    assert.equal(highestUnlockedLevel(track, department, earned), 5);
+    assert.deepEqual(newlyEarnedLevelBadges(track, heldIds, earned), []);
+    assert.equal(levelBadgeLabel(department, 5), `${department ?? "General"} Lvl 5`);
+  });
+}
+
+test("level 5 respects level 4 completion and department isolation", () => {
+  const track = [cert(104, "Manufacturing", 4), cert(105, "Manufacturing", 5)];
+  assert.ok(!isLevelUnlocked(track, "Manufacturing", 5, [badge("Software", 4)]));
+  assert.ok(!isLevelUnlocked(track, "Manufacturing", 5, [badge("Manufacturing", 3)]));
+  const earned = [badge("Manufacturing", 4)];
+  assert.ok(isLevelUnlocked([...track, cert(106, "Manufacturing", 4)], "Manufacturing", 5, earned));
+});
+
+test("empty levels 3 and 4 cannot bypass an unfinished level 2", () => {
+  const track = [cert(102, "Software", 2), cert(105, "Software", 5)];
+  assert.ok(!isLevelUnlocked(track, "Software", 5, []));
+  assert.ok(isLevelUnlocked(track, "Software", 5, [badge("Software", 2)]));
+  assert.deepEqual(newlyEarnedLevelBadges(track, held(102), []), [badge("Software", 2)]);
+});
+
 // --- award ------------------------------------------------------------------
 
 test("newlyEarnedLevelBadges returns a badge the moment the last cert lands", () => {
@@ -221,6 +257,9 @@ test("certificationTracks lists departments alphabetically with General last", (
 test("normalizeLevel clamps into 1..MAX_LEVEL", () => {
   assert.equal(normalizeLevel(2), 2);
   assert.equal(normalizeLevel("3"), 3);
+  assert.equal(normalizeLevel(4), 4);
+  assert.equal(normalizeLevel("5"), 5);
+  assert.equal(normalizeLevel(6), 5);
   assert.equal(normalizeLevel(0), 1);
   assert.equal(normalizeLevel(-5), 1);
   assert.equal(normalizeLevel(99), MAX_LEVEL);

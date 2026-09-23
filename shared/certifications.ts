@@ -15,7 +15,8 @@
 // be shared verbatim between the client and server, and unit-tested with no
 // database — see server/certifications.test.ts.
 
-export const MAX_LEVEL = 3;
+/** Level 1 is entry level; Level 5 is the highest certification level. */
+export const MAX_LEVEL = 5;
 
 /** Every level in a track, lowest first. */
 export const LEVELS: number[] = Array.from({ length: MAX_LEVEL }, (_, i) => i + 1);

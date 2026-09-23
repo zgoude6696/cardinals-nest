@@ -73,7 +73,7 @@ const STEPS: TutorialStep[] = [
     label: 'Certifications',
     title: "Define and grant certifications",
     body:
-      "Create certifications (e.g. Drill Press, Lathe, Wiring), grant them to members, and require specific certs before a task can be started. Certifications are grouped by department and level (1-3), and levels unlock in order. Members submit requests and Trainers scoped to that department and level process them step by step. Finishing every certification in a level earns that badge.",
+      "Create certifications (e.g. Drill Press, Lathe, Wiring), grant them to members, and require specific certs before a task can be started. Certifications are grouped by department and level (1-5), and levels unlock in order. Members submit requests and Trainers scoped to that department and level process them step by step. Finishing every certification in a level earns that badge.",
     route: '/certifications',
     routeLabel: 'Open Certifications',
   },
