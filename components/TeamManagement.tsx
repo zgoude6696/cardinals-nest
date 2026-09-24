@@ -9,6 +9,7 @@ import { HOUR_CATEGORIES, styleFor } from './hourCategoryStyles';
 import { BadgeChip, resolveBadge } from './badgeStyles';
 import { onLiveBoard } from '../utils/tasks';
 import DateWindowPicker, { defaultWindow, describeWindow, type DateWindow } from './DateWindowPicker';
+import MemberImportModal from './MemberImportModal';
 import MemberProductivityModal from './MemberProductivityModal';
 
 /** Sortable columns of the Team summary table, in render order. */
@@ -29,12 +30,13 @@ const SUMMARY_COLUMNS: { key: SummarySortKey; label: string; align?: 'center'; h
 
 interface TeamProps {
   state: AppState;
+  onMembersImported: () => Promise<void>;
   onAddUser: (user: User) => void;
   onUpdateUser: (user: User) => void;
   onDeleteUser: (userId: string) => void;
 }
 
-const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, onDeleteUser }) => {
+const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, onDeleteUser, onMembersImported }) => {
   const { settings } = useTeamSettings();
   const { fmtTime: formatTime, fmtDate: fmtDateBase, fmtDateTime } = useTeamTime();
   const deptNames = settings.departments.map(d => d.name);
@@ -102,6 +104,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
   const [search, setSearch] = useState('');
   const [deptFilter, setDeptFilter] = useState<Department | 'All'>('All');
   const [roleFilter, setRoleFilter] = useState<Role | 'All'>('All');
+  const [isImporting, setIsImporting] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [selectedUserForStats, setSelectedUserForStats] = useState<User | null>(null);
@@ -465,6 +468,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
                         )}
                       </>
                     )}
+                    {canEditUsers && <button onClick={() => setIsImporting(true)} className="px-4 py-3 rounded-xl border border-teamColor text-teamColor font-bold text-sm">Import Members</button>}
                     {canEditUsers && (
                       <button 
                           onClick={() => setIsAdding(true)}
@@ -1450,6 +1454,7 @@ const TeamManagement: React.FC<TeamProps> = ({ state, onAddUser, onUpdateUser, o
           </div>
         )}
 
+        {isImporting && canEditUsers && <MemberImportModal onClose={() => setIsImporting(false)} onImported={onMembersImported} />}
         {isAdding && (
             <AddMemberModal 
               users={state.users}

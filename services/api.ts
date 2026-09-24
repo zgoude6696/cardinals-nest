@@ -1,3 +1,4 @@
+import type { MemberImportReport } from '../shared/memberImport';
 import type { AvailableTask, GeneralTask, MemberProductivity, ProductivityDeepDive } from '../types';
 import type { DepartmentUsageMap } from '../shared/departments';
 
@@ -66,6 +67,8 @@ export const api = {
     logout: () => apiRequest<{ ok: boolean }>('/logout', { method: 'POST' }),
   },
   users: {
+    previewImport: (csv: string) => apiRequest<MemberImportReport>('/users/import/preview', { method: 'POST', body: JSON.stringify({ csv }) }),
+    commitImport: (csv: string, selectedRows: number[]) => apiRequest<MemberImportReport>('/users/import/commit', { method: 'POST', body: JSON.stringify({ csv, selectedRows }) }),
     getAll: () => apiRequest<any[]>('/users'),
     create: (user: any) =>
       apiRequest<any>('/users', { method: 'POST', body: JSON.stringify(user) }),

@@ -10,6 +10,10 @@ import {
 } from "../security";
 import { requireRoles } from "../middleware/auth";
 
+import { createMember, MemberCreationError } from "../createMember";
+import { MAX_IMPORT_ROWS } from "../../shared/memberImport";
+import { processMemberImport } from "../memberImport";
+
 const COACH_CAPTAIN = ["Coach", "Team Captain"];
 
 const router = Router();
@@ -70,30 +74,30 @@ router.get("/users", async (req, res) => {
 
 router.post("/users", requireRoles(...COACH_CAPTAIN), async (req, res) => {
   try {
-    const normalizedUsername = req.body.username?.toLowerCase().trim();
-    if (!normalizedUsername) {
-      return res.status(400).json({ error: "Username is required" });
-    }
-    const rawPassword = req.body.password;
-    if (!rawPassword || String(rawPassword).length < 8) {
-      return res.status(400).json({ error: "Password must be at least 8 characters" });
-    }
-    const existingUser = await storage.getUserByUsername(normalizedUsername);
-    if (existingUser) {
-      return res.status(400).json({ error: "Username already taken" });
-    }
-    const userData = {
-      ...req.body,
-      username: normalizedUsername,
-      password: await hashPassword(String(rawPassword)),
-    };
-    const user = await storage.createUser(userData);
-    res.status(201).json(sanitizeUser(user));
+    res.status(201).json(await createMember(req.body));
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Failed to create user" });
+    res.status(error instanceof MemberCreationError ? error.status : 500).json({
+      error: error instanceof MemberCreationError ? error.message : "Failed to create user",
+    });
   }
 });
+
+// Both phases revalidate server-side. Uploaded text stays in request memory only.
+for (const phase of ['preview', 'commit']) {
+  router.post(`/users/import/${phase}`, requireRoles(...COACH_CAPTAIN), async (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try {
+      if (phase === 'commit' && (!Array.isArray(req.body.selectedRows) || req.body.selectedRows.length > MAX_IMPORT_ROWS || !req.body.selectedRows.every((n: unknown) => Number.isInteger(n) && Number(n) >= 2 && Number(n) <= MAX_IMPORT_ROWS + 1))) {
+        return res.status(400).json({ error: 'Preview the CSV and select valid rows before importing' });
+      }
+      const report = await processMemberImport(req.body.csv, phase === 'commit', req.body.selectedRows);
+      res.json(report);
+    } catch {
+      // Never log exceptions here: database/CSV errors can contain submitted values.
+      res.status(500).json({ error: 'Import unavailable. Re-preview the CSV before retrying.' });
+    }
+  });
+}
 
 router.put("/users/:id", async (req, res) => {
   try {

@@ -18,3 +18,17 @@ To test certification approval, assign Trainer plus the appropriate department/l
 No custom domain is required for testing. The public team website at team6696.org remains separate.
 
 References: https://render.com/docs/free and https://render.com/docs/blueprint-spec
+
+## Routine updates
+
+The live service uses `zgoude6696/cardinals-nest`, branch `deploy/render-test`.
+After testing locally, push that branch; Render's **Auto-Deploy → On Commit**
+should build and deploy it. Check **Deploys** for the same commit and a successful
+health check, then reload `https://nest.team6696.org`.
+
+If a push does not trigger a deploy, check the existing Render account's
+**Account settings → Account Security → Git Deployment Credentials**. It must
+have the `zgoude6696` GitHub credential connected, and the Render GitHub app must
+have access to `cardinals-nest`. A public repository can still be cloned manually
+without this connection, which does not prove auto-deployment is configured.
+Fallback: **Manual Deploy → Deploy latest commit**.

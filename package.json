@@ -16,7 +16,6 @@
     "schema:push": "drizzle-kit push --config=db/drizzle.config.ts",
     "db:studio": "drizzle-kit studio --config=db/drizzle.config.ts",
     "db:reset": "tsx server/reset.ts",
-    "db:diagnose-tz": "tsx server/diagnose-tz.ts",
     "db:diagnose-tz": "tsx server/diagnoseTimestamps.ts",
     "db:migrate-timestamptz": "tsx server/migrateTimestamptz.ts"
   },
@@ -42,6 +41,7 @@
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.562.0",
     "pako": "^2.1.0",
+    "papaparse": "^5.7.0",
     "pg": "^8.16.3",
     "pngjs": "^7.0.0",
     "postcss": "^8.5.24",
@@ -94,6 +94,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.14.0",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/web-push": "^3.6.4",

@@ -653,6 +653,7 @@ const App: React.FC = () => {
               <Route path="/team" element={isGuest ? <Navigate to="/scout" replace /> :
                 <TeamManagement 
                   state={state}
+                  onMembersImported={fetchData}
                   onAddUser={async (u) => {
                     const data: any = { ...u };
                     delete data.id;
